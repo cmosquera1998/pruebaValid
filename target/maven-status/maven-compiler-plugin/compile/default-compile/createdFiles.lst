@@ -1,0 +1,9 @@
+com/prueba/valid/service/RegistroService.class
+com/prueba/valid/ValidApplication.class
+com/prueba/valid/modelo/Registro.class
+com/prueba/valid/util/ErrorMessage2.class
+com/prueba/valid/controller/RegistroController.class
+com/prueba/valid/util/ErrorMessage.class
+com/prueba/valid/repository/IRegService.class
+com/prueba/valid/repository/IRegistroDao.class
+com/prueba/valid/ServletInitializer.class

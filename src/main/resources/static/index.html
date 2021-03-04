@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	crossorigin="anonymous">
+<title>Valid</title>
+</head>
+<body>
+
+	<div class="col-sm-0 offset-sm- text-center">
+		<h1 class="display-3">Registro Valid</h1>
+		<form id="myForm">
+			<div class="container align-items-center">
+				<br />
+				<div class="row">
+					<div class="col-sm-2"></div>
+					<label for="nombre" class="col-sm-2 col-form-label">Nombre</label>
+					<div class="col-sm-4">
+						<input type="text" class="form-control" id="fname"
+							placeholder="Ingrese su nombre" required>
+					</div>
+					<div class="col-sm-2"></div>
+				</div>
+				<br />
+				<div class="row">
+					<div class="col-sm-2"></div>
+					<label for="apellido" class="col-sm-2 col-form-label">Apellido</label>
+					<div class="col-sm-4">
+						<input type="text" class="form-control" id="lname"
+							placeholder="Ingrese su apellido" required>
+					</div>
+					<div class="col-sm-2"></div>
+				</div>
+				<br /> <button class="btn btn-success " type="submit"
+					onclick="myFunction()">Registrar</button> <br />
+					<br/> <a
+					href="consultaR.html">Consulta de registros</a>
+			</div>
+		</form>
+	</div>
+	<script>
+		async function myFunction() {
+			var fname = document.getElementById('fname');
+			var lname = document.getElementById('lname');
+			let blob = {
+				"nombre" : fname.value,
+				"apellido" : lname.value
+			}
+			let response = await
+			fetch('http://localhost:8080/valid/v1/createRegistro', {
+				method : 'POST',
+				body : JSON.stringify(blob),
+				headers : {
+					'Content-Type' : 'application/json'
+				// 'Content-Type': 'application/x-www-form-urlencoded',
+				}
+			});
+			let result = await
+			response.json();
+			alert(result.mensaje);
+
+		}
+	</script>
+
+</body>
+</html>

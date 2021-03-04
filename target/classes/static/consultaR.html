@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+	crossorigin="anonymous">
+<title>Valid</title>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+
+	<div class="col-sm-0 offset-sm- text-center">
+		<h1 class="display-3">Listado Valid</h1>
+		<br /> <span id="lista"></span>
+		<br /> <button class="btn btn-success " type="submit"
+					onclick="updateList()">Procesar</button> <br />
+					<br/> <a
+		href="index.html">Realizar registro</a>
+		
+	</div>
+	<script>
+	let editable = [];
+	
+	go();
+	async function go(){
+			let list = document.getElementById('lista');
+			
+			let html = '<table>'+
+				  '<tr>'+
+		    '<th>Nombre</th>'+
+		    '<th>Apellido</th>'+
+		    '<th>Procesado</th>'+
+		    '<th>Seleccionar</th>'+
+		    '</tr>';
+			let response = await
+			fetch('http://localhost:8080/valid/v1/getRegistros', {
+				method : 'GET',
+				headers : {
+					'Accept' : 'application/json'
+				// 'Content-Type': 'application/x-www-form-urlencoded',
+				}
+			});
+			let result = await
+			response.json();
+			for(i = 0; i < result.response.length; i++){
+				if(!result.response[i].procesado)
+					editable[editable.length]=result.response[i];
+				let enabled = result.response[i].procesado ? "disabled" : "enabled" ;
+				let proc = result.response[i].procesado ? "Si" : "No" ;
+				html += '<tr>'+
+                '<td >'+ result.response[i].nombre + '</td>'+
+                '<td >'+ result.response[i].apellido + '</td>'+
+                '<td >'+ proc + '</td>'+
+                '<td >'+
+                  '<div >'+
+                    '<input id="chk' + result.response[i].idRegistro + '" type="checkbox" ' + enabled + '/>'
+                  '</div>'+
+                '</td>'+
+            '</tr>'
+			}
+			html += '</table>';
+			list.innerHTML = html;
+			console.log(result);
+			console.log(editable);
+	}
+	
+	async function updateList() {
+		let selected = [];
+		for(i = 0; i < editable.length; i++){
+			if(document.getElementById('chk' + editable[i].idRegistro).checked)
+				selected[selected.length] = editable[i];
+		}
+		let response = await
+		fetch('http://localhost:8080/valid/v1/updatedRegistro', {
+			method : 'POST',
+			body : JSON.stringify(selected),
+			headers : {
+				'Content-Type' : 'application/json'
+			// 'Content-Type': 'application/x-www-form-urlencoded',
+			}
+		});
+		let result = await
+		response.json();
+		go();
+
+	}
+
+	</script>
+
+</body>
+</html>
